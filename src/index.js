@@ -1,4 +1,4 @@
-import date_utils from './date_utils';
+import date_utils, { HOUR, MINUTE, SECOND } from './date_utils';
 import { $, createSVG } from './svg_utils';
 import Bar from './bar';
 import Arrow from './arrow';
@@ -125,7 +125,12 @@ export default class Gantt {
             // e.g: 2018-09-09 becomes 2018-09-09 23:59:59
             const task_end_values = date_utils.get_date_values(task._end);
             if (task_end_values.slice(3).every((d) => d === 0)) {
-                task._end = date_utils.add(task._end, 24, 'hour');
+                task._end = date_utils
+                    .create_setter(task._end)
+                    .set(HOUR, 23)
+                    .set(MINUTE, 59)
+                    .set(SECOND, 59)
+                    .finish();
             }
 
             // invalid flag

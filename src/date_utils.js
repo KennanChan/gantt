@@ -1,10 +1,10 @@
-const YEAR = 'year';
-const MONTH = 'month';
-const DAY = 'day';
-const HOUR = 'hour';
-const MINUTE = 'minute';
-const SECOND = 'second';
-const MILLISECOND = 'millisecond';
+export const YEAR = 'year';
+export const MONTH = 'month';
+export const DAY = 'day';
+export const HOUR = 'hour';
+export const MINUTE = 'minute';
+export const SECOND = 'second';
+export const MILLISECOND = 'millisecond';
 
 const month_names = {
     en: [
@@ -285,6 +285,28 @@ export default {
             date.getMilliseconds() + (scale === MILLISECOND ? qty : 0),
         ];
         return new Date(...vals);
+    },
+
+    create_setter(date) {
+        const values = {}
+        return {
+            set(scale, value) {
+                values[scale] = parseInt(value, 10)
+                return this
+            },
+            finish() {
+                const vals = [
+                    values[YEAR] ?? date.getFullYear(),
+                    values[MONTH] ?? date.getMonth(),
+                    values[DAY] ?? date.getDate(),
+                    values[HOUR] ?? date.getHours(),
+                    values[MINUTE] ?? date.getMinutes(),
+                    values[SECOND] ?? date.getSeconds(),
+                    values[MILLISECOND] ?? date.getMilliseconds(),
+                ];
+                return new Date(...vals);
+            }
+        }
     },
 
     start_of(date, scale) {
